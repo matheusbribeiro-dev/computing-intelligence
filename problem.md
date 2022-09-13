@@ -1,0 +1,4 @@
+- [x] Desenvolver uma heurística de construção; 
+- [ ] Desenvolver uma heurística de refinamento;
+  - Passar a solução gerada para uma função e alterá-la.
+- [ ] Desenvolver o método da subida.
