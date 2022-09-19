@@ -16,16 +16,26 @@ for($i = 0; $i < $objectsQuantity; $i++) {
     $benefits[] = (int) readline("Beneficio objeto $i: ");
 }
 
-function createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity)
+function createANeighborOfTheBackpack($backpack, $weights, &$backpackCapacity)
 {
     $randomIndex = array_rand($backpack, 1);
     $weightObject = $weights[$randomIndex];
 
     if ($backpack[$randomIndex] === 0) {
-        //Mudar para 1 se couber
-    } else {
-        createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity);
+        if ($weightObject > $backpackCapacity) {
+            echo "Vizinho inviável" . PHP_EOL;
+            createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity);
+        }
+
+        $backpack[$randomIndex] = 1;
+        $backpackCapacity -= $weightObject;
+        return $backpack;
     }
+
+    $backpack[$randomIndex] = 0;
+    $backpackCapacity += $weightObject;
+
+    return $backpack;
 }
 
 function putInTheBackpack(&$backpack, &$backpackCapacity, $currentWeight)
@@ -55,7 +65,7 @@ function totalBenefitInBackpack($backpack, $benefits)
 
 foreach($weights as $key => $weight) {
     $randomNumber = rand(0, 1);
-    
+    echo "Tentar colocar: {$randomNumber}" . PHP_EOL;
     if($randomNumber === 0) {
         $backpack[] = $randomNumber;
         continue;
@@ -64,10 +74,15 @@ foreach($weights as $key => $weight) {
     putInTheBackpack($backpack, $backpackCapacity, $weight);
 }
 
-//$neighbor = createANeighborOfTheBackpack($backpack, $weights);
-
 echo PHP_EOL;
+echo "Antes do vizinho" . PHP_EOL;
 var_dump($backpack);
 
 echo PHP_EOL;
-echo "Benefício total da mochila: " . totalBenefitInBackpack($backpack, $benefits) . PHP_EOL;
+echo "Vizinho" . PHP_EOL;
+$neighbor = createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity);
+var_dump($neighbor);
+
+
+echo PHP_EOL;
+echo "Capacidade atual da mochila: " . $backpackCapacity . PHP_EOL;
