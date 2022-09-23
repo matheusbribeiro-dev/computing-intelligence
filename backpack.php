@@ -1,4 +1,7 @@
 <?php
+//vezes possíveis de geração de vizinho viável
+$timesToNeighbor = 0;
+$timesToClimb = 0;
 
 // Mochila que receberá ou não os objetos.
 $backpack = [];
@@ -16,16 +19,24 @@ for($i = 0; $i < $objectsQuantity; $i++) {
     $benefits[] = (int) readline("Beneficio objeto $i: ");
 }
 
-function createANeighborOfTheBackpack($backpack, $weights, &$backpackCapacity)
+function createANeighborOfTheBackpack($backpack, $weights, &$backpackCapacity, &$timesToNeighbor)
 {
     $randomIndex = array_rand($backpack, 1);
     $weightObject = $weights[$randomIndex];
 
     if ($backpack[$randomIndex] === 0) {
         if ($weightObject > $backpackCapacity) {
+            $timesToNeighbor += 1;
+
+            if ($timesToNeighbor >= 3) {
+                return $backpack;
+            }
+
             echo "Vizinho inviável" . PHP_EOL;
-            createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity);
+            createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity, $timesToNeighbor);
         }
+
+        $timesToNeighbor = 0;
 
         $backpack[$randomIndex] = 1;
         $backpackCapacity -= $weightObject;
@@ -75,14 +86,27 @@ foreach($weights as $key => $weight) {
 }
 
 echo PHP_EOL;
-echo "Antes do vizinho" . PHP_EOL;
+echo "Antes da subida" . PHP_EOL;
 var_dump($backpack);
 
-echo PHP_EOL;
-echo "Vizinho" . PHP_EOL;
-$neighbor = createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity);
-var_dump($neighbor);
+$climb = true;
+while ($climb) {
+    $neighbor = createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity, $timesToNeighbor);
 
+    $benefitInTheBackpack = totalBenefitInBackpack($backpack, $benefits);
+    $benefitInTheNeighbor = totalBenefitInBackpack($neighbor, $benefits);
+
+    if($benefitInTheNeighbor > $benefitInTheBackpack) {
+        $backpack = $neighbor;
+
+        $timesToClimb = 0;
+    } else {
+        $timesToClimb += 1;
+
+        if ($timesToClimb === 5) $climb = false;
+    }
+}
 
 echo PHP_EOL;
-echo "Capacidade atual da mochila: " . $backpackCapacity . PHP_EOL;
+echo "Depois da subida" . PHP_EOL;
+var_dump($backpack);
