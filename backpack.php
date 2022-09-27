@@ -76,7 +76,7 @@ function totalBenefitInBackpack($backpack, $benefits)
 
     return $total;
 }
-
+//Início
 foreach($weights as $key => $weight) {
     $randomNumber = rand(0, 1);
     echo "Tentar colocar: {$randomNumber}" . PHP_EOL;
@@ -91,7 +91,7 @@ foreach($weights as $key => $weight) {
 echo PHP_EOL;
 echo "Antes da subida" . PHP_EOL;
 var_dump($backpack);
-
+//Subida
 $climb = true;
 while ($climb) {
     $neighbor = createANeighborOfTheBackpack($backpack, $weights, $backpackCapacity, $backpackCapacityBkp, $timesToNeighbor);
