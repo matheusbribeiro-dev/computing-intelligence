@@ -33,9 +33,8 @@ function totalWeightInTheBackpack($backpack, $weights)
     return $total;
 }
 
-$createANeighborOfTheBackpack =  function () use ($backpack, $backpackCapacity, $weights)
+function createANeighborOfTheBackpack($neighbor)
 {
-    $neighbor = $backpack;
     $randomNumber = array_rand($neighbor, 1);
 
     if ($neighbor[$randomNumber] === 0) {
@@ -87,20 +86,26 @@ echo PHP_EOL;
 echo "Antes da subida" . PHP_EOL;
 var_dump($backpack);
 
+$neighbor = $backpack;
+
 //Subida
-while ($timesToClimb < 5) {
-    $neighbor = $createANeighborOfTheBackpack();
+while ($timesToNeighbor < 3) {
+    $neighborCandidate = createANeighborOfTheBackpack($neighbor);
+    $weightInNeighbor = totalWeightInTheBackpack($neighborCandidate, $weights);
 
-    $benefitInTheBackpack = totalBenefitInBackpack($backpack, $benefits);
-    $benefitInTheNeighbor = totalBenefitInBackpack($neighbor, $benefits);
-
-    if($benefitInTheNeighbor > $benefitInTheBackpack) {
-        $backpack = $neighbor;
-        $neighbor = [];
-
-        $timesToClimb = 0;
+    if ($weightInNeighbor > $backpackCapacityBkp) {
+        $timesToNeighbor += 1;
     } else {
-        $timesToClimb += 1;
+        $timesToNeighbor = 0;
+
+        $neighbor = $neighborCandidate;
+
+        $benefitInTheBackpack = totalBenefitInBackpack($backpack, $benefits);
+        $benefitInTheNeighbor = totalBenefitInBackpack($neighbor, $benefits);
+
+        if($benefitInTheNeighbor > $benefitInTheBackpack) {
+            $backpack = $neighbor;
+        }
     }
 }
 
