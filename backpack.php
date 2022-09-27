@@ -39,8 +39,8 @@ function createANeighborOfTheBackpack($backpack, $weights, &$backpackCapacity, $
 
         $timesToNeighbor = 0;
 
-        $backpack[$randomIndex] = 1;
         $backpackCapacity -= $weightObject;
+        $backpack[$randomIndex] = 1;
         return $backpack;
     }
 
