@@ -82,35 +82,44 @@ foreach($weights as $key => $weight) {
     putInTheBackpack($backpack, $backpackCapacity, $weight);
 }
 
-echo PHP_EOL;
-echo "Antes da subida" . PHP_EOL;
+echo '_________________________' . PHP_EOL;
+echo "Solução inicial: " . PHP_EOL;
 var_dump($backpack);
+echo '_________________________' . PHP_EOL;
 
+$backpackBkp = $backpack;
 $neighbor = $backpack;
 
+$solutions = [];
+
+for($i = 0; $i < 3; $i++) {
 //Subida
-//for($i = 0; $i < 3; $i++) {
-while ($timesToNeighbor < 3) {
-    $neighborCandidate = createANeighborOfTheBackpack($neighbor);
-    $weightInNeighbor = totalWeightInTheBackpack($neighborCandidate, $weights);
+    $neighbor = $backpackBkp;
 
-    if ($weightInNeighbor > $backpackCapacityBkp) {
-        $timesToNeighbor += 1;
-    } else {
-        $timesToNeighbor = 0;
+    while ($timesToNeighbor < 3) {
+        $neighborCandidate = createANeighborOfTheBackpack($neighbor);
+        $weightInNeighbor = totalWeightInTheBackpack($neighborCandidate, $weights);
 
-        $neighbor = $neighborCandidate;
+        if ($weightInNeighbor > $backpackCapacityBkp) {
+            $timesToNeighbor += 1;
+        } else {
+            $timesToNeighbor = 0;
 
-        $benefitInTheBackpack = totalBenefitInBackpack($backpack, $benefits);
-        $benefitInTheNeighbor = totalBenefitInBackpack($neighbor, $benefits);
+            $neighbor = $neighborCandidate;
 
-        if($benefitInTheNeighbor > $benefitInTheBackpack) {
-            $backpack = $neighbor;
+            $benefitInTheBackpack = totalBenefitInBackpack($backpack, $benefits);
+            $benefitInTheNeighbor = totalBenefitInBackpack($neighbor, $benefits);
+
+            if($benefitInTheNeighbor > $benefitInTheBackpack) {
+                $backpack = $neighbor;
+            }
         }
     }
-}
-//}
 
-echo PHP_EOL;
-echo "Depois da subida" . PHP_EOL;
-var_dump($backpack);
+    $solutions[] = $backpack;
+}
+
+echo PHP_EOL . 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' . PHP_EOL;
+echo "Soluções geradas: " . PHP_EOL;
+var_dump($solutions);
+echo 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
