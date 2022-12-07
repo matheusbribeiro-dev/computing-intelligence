@@ -89,6 +89,7 @@ var_dump($backpack);
 $neighbor = $backpack;
 
 //Subida
+//for($i = 0; $i < 3; $i++) {
 while ($timesToNeighbor < 3) {
     $neighborCandidate = createANeighborOfTheBackpack($neighbor);
     $weightInNeighbor = totalWeightInTheBackpack($neighborCandidate, $weights);
@@ -108,6 +109,7 @@ while ($timesToNeighbor < 3) {
         }
     }
 }
+//}
 
 echo PHP_EOL;
 echo "Depois da subida" . PHP_EOL;
